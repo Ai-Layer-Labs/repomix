@@ -18,10 +18,20 @@ export const registerPackRemoteRepositoryTool = (mcpServer: McpServer) => {
         .boolean()
         .default(true)
         .describe(
-          'Condense code by removing non-essential whitespace and comments to optimize token usage (default: true)',
+          'Utilize Tree-sitter to intelligently extract essential code signatures and structure while removing implementation details, significantly reducing token usage (default: true)',
         ),
-      includePatterns: z.string().optional().describe('List of include patterns (comma-separated)'),
-      ignorePatterns: z.string().optional().describe('Additional ignore patterns (comma-separated)'),
+      includePatterns: z
+        .string()
+        .optional()
+        .describe(
+          'Specify which files to include using fast-glob compatible patterns (e.g., "**/*.js,src/**"). Only files matching these patterns will be processed',
+        ),
+      ignorePatterns: z
+        .string()
+        .optional()
+        .describe(
+          'Specify additional files to exclude using fast-glob compatible patterns (e.g., "test/**,*.spec.js"). These patterns complement .gitignore and default ignores',
+        ),
     },
     async ({ remote, includePatterns, ignorePatterns, compress }): Promise<CallToolResult> => {
       try {
